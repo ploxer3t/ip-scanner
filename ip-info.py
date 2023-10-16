@@ -1,23 +1,35 @@
 import requests
+from termcolor import colored
 
+def get_ip_info(ip_address):
+    """Gets the IP address information."""
 
-ip_address = input("Enter IP address: ")
+    # Make a request to the IP address info API.
+    response = requests.get("https://ipinfo.io/{}/json".format(ip_address))
 
-
-url = f"http://ip-api.com/json/{ip_address}"
-
-
-response = requests.get(url)
-
-
-if response.status_code == 200:
+    # Parse the JSON response.
     data = response.json()
-    print(f"Country: {data['country']}")
-    print(f"City: {data['city']}")
-    print(f"Region: {data['regionName']}")
-    print(f"ISP: {data['isp']}")
-    print(f"Latitude: {data['lat']}")
-    print(f"Longitude: {data['lon']}")
 
-else:
-    print("Error getting location data.")
+    # Return the IP address information.
+    return data
+
+def main():
+    """Gets the IP address information and prints it to the console."""
+
+    # Get the IP address from the user.
+    ip_address = input("Enter an IP address: ")
+
+    # Get the IP address information.
+    ip_info = get_ip_info(ip_address)
+
+    # Print the IP address information to the console.
+    print(colored("IP", "red"), "->", colored(ip_info["ip"], "yellow"))
+    print(colored("City", "red"), "->", colored(ip_info["city"], "yellow"))
+    print(colored("Region", "red"), "->", colored(ip_info["region"], "yellow"))
+    print(colored("Country", "red"), "->", colored(ip_info["country"], "yellow"))
+    print(colored("Postal Code", "red"), "->", colored(ip_info["postal"], "yellow"))
+    print(colored("Timezone", "red"), "->", colored(ip_info["timezone"], "yellow"))
+    print(colored("Coordinates", "red"), "->", colored(ip_info["loc"], "yellow"))
+    print(colored("By: @Ploxeret Happy H4CK1NG", "blue"))
+if __name__ == "__main__":
+    main()
